@@ -11,13 +11,18 @@ var pokemonRepository = (function () {
     var $pokemonList = $(".pokemon-list");
     var $listItem = $("<li>");
     var $button = $(
-      "<button class='poke-button'>" + pokemon.name + "</button>"
+      '<button type="button"' +
+        'class="btn btn-primary"' +
+        'data-toggle="modal"' +
+        'data-target="#exampleModal">' +
+        pokemon.name +
+        "</button>"
     );
     $listItem.append($button);
     $pokemonList.append($listItem);
-    $button.on("click", function (event) {
-      showDetails(pokemon);
-    });
+    // $button.on("click", function (event) {
+    //   showDetails(pokemon);
+    // });
   }
   function showDetails(item) {
     pokemonRepository.loadDetails(item).then(function () {
@@ -61,22 +66,71 @@ var pokemonRepository = (function () {
         console.error(e);
       });
   }
+
   function showModal(item) {
-    var $modalContainer = $(".modal-container");
-    var modal = $('<div class="modal"></div>');
-    var closeButtonElement = $('<button class="modal-close">close</button>');
-    closeButtonElement.on("click", hideModal);
+    var modalBody = $(".modal-body");
+    var modalTitle = $(".modal-title");
+    var modalHeader = $(".modal-header");
+    // var $modalContainer = $("#modal-container");
+    //clear existing content of the model
+    // modalHeader.empty();
+    modalTitle.empty();
+    modalBody.empty();
+
+    //creating element for name in modal content
     var nameElement = $("<h1>" + item.name + "</h1>");
-    var imageElement = $("<img class='modal-img'>");
+    // // creating img in modal content
+    var imageElement = $('<img class="modal-img" style="width:50%">');
     imageElement.attr("src", item.imageUrl);
-    var heightElement = $("<p>" + "height: " + item.height + "</p>");
-    modal.append(closeButtonElement);
-    modal.append(nameElement);
-    modal.append(heightElement);
-    modal.append(imageElement);
-    $modalContainer.append(modal);
-    $modalContainer.addClass("is-visible");
+    var imageElementBack = $('<img class="modal-img" style="width:50%">');
+    imageElementBack.attr("src", item.imageUrlBack);
+    // //creating element for height in modal content
+    var heightElement = $("<p>" + "height : " + item.height + "</p>");
+    // //creating element for type in modal content
+    var typesElement = $("<p>" + "types : " + item.types + "</p>");
+    // //creating element for abilities in modal content
+    var abilitiesElement = $("<p>" + "abilities : " + item.abilities + "</p>");
+
+    modalTitle.append(nameElement);
+    modalBody.append(imageElement);
+    modalBody.append(imageElementBack);
+    modalBody.append(heightElement);
+    modalBody.append(typesElement);
+    modalBody.append(abilitiesElement);
   }
+
+  // function showModal(item) {
+  //   var $modalContainer = $(".modal-container");
+  //   var modal =
+  //     '<div class="modal-dialog" role="document">' +
+  //     '<div class="modal-content">' +
+  //     '<div class="modal-header">' +
+  //     '<h1 class="modal-title">' +
+  //     item.name +
+  //     "</h1>" +
+  //     '<button class="btn close modal-close" data-dismiss="modal">close</button>' +
+  //     "</div>" +
+  //     '<div class="modal-body">' +
+  //     '<img class="modal-img" src=item.imageUrl>' +
+  //     "<p>" +
+  //     "height: " +
+  //     item.height +
+  //     "</p>" +
+  //     "</div>" +
+  //     "</div>" +
+  //     "</div>";
+  //   // closeButtonElement.on("click", hideModal);
+  //   // var nameElement = $("<h1>" + item.name + "</h1>");
+  //   // var imageElement = $("<img class='modal-img'>");
+  //   // imageElement.attr("src", item.imageUrl);
+  //   // var heightElement = $("<p>" + "height: " + item.height + "</p>");
+  //   // modal.append(closeButtonElement);
+  //   // modal.append(nameElement);
+  //   // modal.append(heightElement);
+  //   // modal.append(imageElement);
+  //   $modalContainer.append(modal);
+  //   $modalContainer.addClass("is-visible");
+  // }
   function hideModal() {
     var $modalContainer = $(".modal-container");
     $modalContainer.removeClass("is-visible");
@@ -87,13 +141,13 @@ var pokemonRepository = (function () {
       hideModal();
     }
   });
-  var $modalContainer = document.querySelector(".modal-container");
-  $modalContainer.addEventListener("click", (event) => {
-    var target = event.target;
-    if (target === $modalContainer) {
+
+  $("body").click(function () {
+    if ($(".modal-container").is(":visible")) {
       hideModal();
     }
   });
+
   return {
     add: add,
     getAll: getAll,
