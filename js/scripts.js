@@ -1,6 +1,6 @@
 var pokemonRepository = (function () {
   var repository = [];
-  var apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=150";
+  var apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=151";
   function add(pokemon) {
     repository.push(pokemon);
   }
@@ -10,20 +10,18 @@ var pokemonRepository = (function () {
   function addListItem(pokemon) {
     pokemonRepository.loadDetails(pokemon).then(function () {
       var $row = $(".row");
-      var $card = $('<div class="card" style="width:400px"></div>');
+      var $card = $('<div class="card" style="width:200px"></div>');
       var $image = $(
-        '<img class="card-img-top" alt="Card image" style="width:20%" />'
+        '<img class="card-img-top" alt="Card image" style="width:100%" />'
       );
       $image.attr("src", pokemon.imageUrl);
       var $cardBody = $('<div class="card-body"></div>');
-      var $cardTitle = $("<h4 class='card-title' >" + pokemon.name + "</h4>");
       var $seeProfile = $(
-        '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal">See Profile</button>'
+        "<button type='button' class='btn btn-primary pokemon-name' data-toggle='modal' data-target='#Modal'>" + pokemon.name + "</button>"
       );
       $row.append($card);
       $card.append($image);
       $card.append($cardBody);
-      $cardBody.append($cardTitle);
       $cardBody.append($seeProfile);
       $seeProfile.on("click", function (event) {
         showDetails(pokemon);
@@ -53,19 +51,25 @@ var pokemonRepository = (function () {
       });
   }
   function loadDetails(item) {
+    // var url = item.detailsUrl;
+    // return $.ajax(url)
     var url = item.detailsUrl;
-    return $.ajax(url)
+    return fetch(url)
+      .then(function (response) {
+        return response.json();
+      })
+      
       .then(function (details) {
         item.imageUrl = details.sprites.front_default;
         item.imageUrlBack = details.sprites.back_default;
-        item.height = details.height;
+        item.height = " " + details.height;
         item.types = [];
         details.types.forEach(function (i) {
-          item.types.push(i.type.name);
+          item.types.push(" " + i.type.name);
         });
         item.abilities = [];
         details.abilities.forEach(function (i) {
-          item.abilities.push(i.ability.name);
+          item.abilities.push(" " + i.ability.name);
         });
       })
       .catch(function (e) {
@@ -83,9 +87,9 @@ var pokemonRepository = (function () {
     imageElement.attr("src", item.imageUrl);
     var imageElementBack = $('<img class="modal-img" style="width:50%">');
     imageElementBack.attr("src", item.imageUrlBack);
-    var heightElement = $("<p>" + "height : " + item.height + "</p>");
-    var typesElement = $("<p>" + "types : " + item.types + "</p>");
-    var abilitiesElement = $("<p>" + "abilities : " + item.abilities + "</p>");
+    var heightElement = $("<p>" + "height:" + item.height + "</p>");
+    var typesElement = $("<p>" + "types:" + item.types + "</p>");
+    var abilitiesElement = $("<p>" + "abilities:" + item.abilities +"</p>");
     modalTitle.append(nameElement);
     modalBody.append(imageElement);
     modalBody.append(imageElementBack);
@@ -121,3 +125,23 @@ pokemonRepository.loadList().then(function () {
     pokemonRepository.addListItem(pokemon);
   });
 });
+function search() {
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myUL");
+  // li = ul.getElementsByTagName("");
+  li = ul.querySelectorAll(".card");
+  // console.log(li[0].querySelector(".card-body").querySelector(".card-title"));
+  for (i = 0; i < li.length; i++) {
+    // a = li[i].getElementsByTagName("a")[0];
+    a = li[i].querySelector(".card-body").querySelector(".pokemon-name");
+    console.log(a.innerText);
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}

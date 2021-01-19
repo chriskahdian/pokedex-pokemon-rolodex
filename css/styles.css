@@ -1,7 +1,35 @@
 .poke-button, .modal-close {
-    background-color: lightblue
+    background-color: lightblue;
+    align-items: center;
+}
+
+.card-body {
+    text-align: center;
 }
 
 .modal-container {
     display: none;
+}
+
+.titleDiv{
+    position: fixed;
+    text-align: center;
+    z-index: 99;
+    background-color: white;
+    width: 95%;
+}
+
+.row{
+    width: 95%;
+    justify-content: center;
+    margin-top: 6rem;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+}
+
+.searchBar{
+    width: 15%;
 }
