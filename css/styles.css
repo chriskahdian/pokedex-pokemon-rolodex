@@ -1,7 +1,47 @@
+body{
+    display: flex;
+    justify-content: center;
+    background-image: linear-gradient(white, rgba(216, 229, 255, 0.300), white, rgba(216, 229, 255, 0.300));
+    /* background-repeat: no-repeat; */
+    background-size: 100% 100%;
+}
+
 .poke-button, .modal-close {
-    background-color: lightblue
+    background-color: lightblue;
+    align-items: center;
+}
+
+.card-body {
+    text-align: center;
+    background-image: linear-gradient(white, rgb(255, 252, 237));
 }
 
 .modal-container {
     display: none;
+}
+
+.titleDivBackground{
+    background-color: white;
+    border: solid;
+    width: 100%;
+}
+
+.titleDiv{
+    position: fixed;
+    text-align: center;
+    z-index: 99;
+    background-image: linear-gradient(white, rgb(255, 252, 237));
+    width: 500px;
+    border: 1px solid rgb(216, 229, 255);
+    height: 93px;
+    margin: 10px;
+}
+
+.row{
+    justify-content: center;
+    margin-top: 113px;
+}
+
+.searchBar{
+    width: 95%;
 }
